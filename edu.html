@@ -1,0 +1,233 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+    <meta charset="UTF-8" />
+    <title></title>
+    <style type="text/css">
+    body {
+        font-family: Arial;
+        font-size: 20px;
+        background-color:cornsilk;
+    }
+    form {
+        width: 80%;
+        margin: auto;
+        padding: 20px;
+        color:saddlebrown;
+    }
+    #code {
+        padding: 5px 15px;
+        border: 2px indianred gainsboro;
+        -webkit-border-radius: 6px;
+        border-radius: 5px;
+        font-size: 17px;
+    }
+    fieldset {
+        padding: 20px;
+        background-color: bisque;
+    }
+    table {
+        width: 80%;
+        margin-left:auto; 
+        margin-right:auto;
+    }
+    #title {
+        text-align: center;
+    }
+    legend {
+        font-size: 25px;
+        font-weight: bold;
+        font-style: italic;
+        color:brown;
+    }
+    #search {
+        padding: 5px 10px;
+        border: 3px black gainsboro;
+        color:brown;
+        font-weight: bold;
+        -webkit-border-radius: 6px;
+        border-radius: 5px;
+        font-size: 17px;
+    }
+    caption {
+        color: maroon;
+        font-weight: bolder;
+        background-color: bisque;
+    }
+    th {
+        border: 2px solid burlywood;
+        color: white;
+        background-color: saddlebrown;
+    }
+    td {
+        background-color:bisque;
+        border: 2px solid burlywood;
+        color: maroon;
+        text-align: center;
+    }
+    </style>
+    <script type="text/javascript">
+        window.onload = function () {
+            init();
+            $("p0").onclick = init;
+            $("p1").onclick = init;
+            $("p2").onclick = init;
+            $("s0").onclick = init;
+            $("s1").onclick = init;
+            $("s2").onclick = init;
+            $("search").onclick = FindCode;
+        };
+        // 找出被選的選項
+        function findvalue() {
+            var ps = document.getElementsByName("P");
+            var ss = document.getElementsByName("system");
+            for (var i =0; i<ps.length; i++) {
+                if (ps[i].checked) {
+                    var p = (ps[i].value);
+                }
+            }
+            for (var j =0; j<ss.length; j++) {
+                if (ss[j].checked) {
+                    var s = (ss[j].value);
+                }
+            }
+            if (p == 0 && s == 0) {
+                FindRatio(p, s);
+            } else {
+                FindRatio(p, s);
+            }
+        }
+        function init() {
+            var check1 = false;
+            var check2 = false;
+            var ps = document.getElementsByName("P");
+            var ss = document.getElementsByName("system");
+            for (var i =0; i<ps.length; i++) {
+                if (ps[i].checked) {
+                    check1 = true;
+                }
+            }
+            for (var j =0; j<ss.length; j++) {
+                if (ss[j].checked) {
+                    check2 = true;
+                }
+            }
+            if (check1 == true && check2 == true) {
+                findvalue();
+            } else if (check1 == false && check2 == true) {
+                ps[0].checked = true;
+                findvalue();
+            } else if (check1 == true && check2 == false) {
+                ss[0].checked = true;
+                findvalue();
+            }
+        }
+        // 查詢學校代碼
+        function FindCode() {
+            if ($("code").value == "") {
+                alert("<錯誤> 學校代碼輸入不可為空！");
+            } else {
+                var ps = document.getElementsByName("P");
+                var ss = document.getElementsByName("system");
+                for (var i =0; i<ps.length; i++) {
+                    if (ps[i].checked) {
+                        ps[i].checked = false;
+                    }
+                }
+                for (var j =0; j<ss.length; j++) {
+                    if (ss[j].checked) {
+                        ss[j].checked = false;
+                    }
+                }
+                var xmlhttp = new XMLHttpRequest();
+                var url = "edu.php?code="+$("code").value;
+                try {
+                    xmlhttp.open("GET", url, true);
+                    xmlhttp.onreadystatechange = rsChange;
+                    xmlhttp.send(null);
+                }
+                catch (e) {
+                    alert(e.message);
+                }
+            }
+        }
+        // 依照類別查詢學校
+        function FindRatio(p, s) {
+            $("code").value = "";
+            var xmlhttp = new XMLHttpRequest();
+            var url = "edu.php?P="+p+"&category="+s;
+            try {
+                xmlhttp.open("GET", url, true);
+                xmlhttp.onreadystatechange = rsChange;
+                xmlhttp.send(null);
+            }
+            catch (e) {
+                alert(e.message);
+            }
+        }
+        function rsChange() {
+            if (this.readyState === 4 && this.status === 200) {
+                var type = this.getResponseHeader("Content-Type"); // 取得回應類型
+                if (type.indexOf("application/json") == 0) {
+                    var data = JSON.parse(this.responseText);
+                    if (data.length == 1) {
+                        $("result").innerHTML = "";
+                        alert("查無此資料！");
+                    } else {
+                        var tblStr = json2Table(data);
+                        document.getElementById("result").innerHTML = tblStr;
+                    }
+                }
+            }
+        }
+        function json2Table(jsonObj) {
+            var tbl = "<table>";
+            tbl += "<caption>以下共有"+(jsonObj.length-1)+"筆資料</caption>";
+            tbl += "<tr>";
+            tbl += "<th>編號</th>";
+            tbl += "<th>" + jsonObj[0].category + "</th>";
+            tbl += "<th>" + jsonObj[0].code + "</th>";
+            tbl += "<th>" + jsonObj[0].type + "</th>";
+            tbl += "<th>" + jsonObj[0].name + "</th>";
+            tbl += "<th>" + jsonObj[0].money + "</th>";
+            tbl += "</tr>";
+            for (let i = 1; i < jsonObj.length; i++) {
+                tbl += "<tr><td>" + i + "</td>";
+                tbl += "<td>" + jsonObj[i].category + "</td>";
+                tbl += "<td>" + jsonObj[i].code + "</td>";
+                tbl += "<td>" + jsonObj[i].type + "</td>";
+                tbl += "<td>" + jsonObj[i].name + "</td>";
+                tbl += "<td>" + (jsonObj[i].money).replace(/\B(?<!\.\d*)(?=(\d{3})+(?!\d))/g, ",") + "</td></tr>";
+            }
+            tbl += "</table>";
+            return tbl;
+        }
+        function $(id) {
+            return document.getElementById(id);
+        }
+    </script>
+</head>
+
+<body>
+    <form> 
+        <h1 id="title">教育部核定各大學高教深耕計畫經費資料</h1>
+        <fieldset>
+            <legend>類別查詢</legend>
+            <label for="code">學校代碼：</label><input type="text" id="code" />
+            <input id="search" type="button" value="查詢" /><br /><br />
+            類別：
+                <input id="s0" type="radio" name="system" value="0" checked="checked" /><label for="s0"> 全部 </label>
+                <input id="s1" type="radio" name="system" value="1" /><label for="s1"> 一般大學 </label>
+                <input id="s2" type="radio" name="system" value="2" /><label for="s2"> 技專校院 </label> <br /><br />
+            公私立：
+                <input id="p0" type="radio" name="P" value="0" checked="checked" /><label for="p0"> 全部 </label>
+                <input id="p1" type="radio" name="P" value="1" /><label for="p1"> 公立 </label>
+                <input id="p2" type="radio" name="P" value="2" /><label for="p2"> 私立 </label> <br /><br />
+        </fieldset>
+    </form>
+    <div id="result">
+    </div>
+</body>
+
+</html>

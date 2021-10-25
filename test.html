@@ -1,0 +1,89 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+    <meta charset="UTF-8" />
+    <title></title>
+    <style type="text/css">
+    </style>
+    <script type="text/javascript">
+        var Alldata = new Array();
+        window.onload = function () {
+            ajax();
+        };
+        function ajax() {
+            //1.聲明異步請求對象：
+            var xmlHttp = null;
+            if (window.ActiveXObject) {
+                // IE6, IE5 瀏覽器執行代碼
+                xmlHttp = new ActiveXObject("Microsoft.XMLHTTP");
+            } else if (window.XMLHttpRequest) {
+                // IE7+, Firefox, Chrome, Opera, Safari 瀏覽器執行代碼
+                xmlHttp = new XMLHttpRequest();
+            }
+            //2.如果實例化成功，就調用open（）方法：
+            if (xmlHttp != null) {
+                xmlHttp.open("get", "edu1.txt", true);
+                xmlHttp.send();
+                xmlHttp.onreadystatechange = doResult; //設置回調函數
+            }
+            function doResult() {
+                var data = new Array();
+                if (xmlHttp.readyState == 4) { // 4表示執行完成
+                    if (xmlHttp.status == 200) { // 200表示執行成功
+                        var T = xmlHttp.responseText.split(')');
+                        var title = T[0] + ")";
+                        var txt = T[1].split('"');
+                        var str = title+"<br />";
+                        for (var i=0; i<txt.length; i++) {
+                            // var a = txt[i].split(',');
+                            str += txt[i];
+                            if (i%2 == 1) {
+                                // str += "<br />";
+                                Alldata.push(str);
+                                str = "";
+                            }
+                        }
+                        var tbl = json2Table(Alldata.split(","));
+                        var a;
+                        for(var j=0; j<Alldata.length; j++) {
+                            a += Alldata[j];
+                            a += "<br />";
+                        }
+                        // var a = "0-"+Alldata[0]+"1-"+ Alldata[1]+"2-"+ Alldata[2]+"3-"+ Alldata[3]+"4-"+Alldata[4]+"5-"+ Alldata[5]+"6-"+ Alldata[6]+"7-"+ Alldata[7]
+                        document.getElementById("resText").innerHTML = tbl;
+                    }
+                }
+            }
+            function json2Table(jsonObj) {
+                var tbl = "<table>";
+                tbl += "<caption>以下共有" + (jsonObj.length - 1) + "筆資料</caption>";
+                tbl += "<tr>";
+                tbl += "<th>編號</th>";
+                tbl += "<th>" + jsonObj[0].category + "</th>";
+                tbl += "<th>" + jsonObj[0].code + "</th>";
+                tbl += "<th>" + jsonObj[0].type + "</th>";
+                tbl += "<th>" + jsonObj[0].name + "</th>";
+                tbl += "<th>" + jsonObj[0].money + "</th>";
+                tbl += "</tr>";
+                for (let i = 1; i < jsonObj.length; i++) {
+                    tbl += "<tr><td>" + i + "</td>";
+                    tbl += "<td>" + jsonObj[i].category + "</td>";
+                    tbl += "<td>" + jsonObj[i].code + "</td>";
+                    tbl += "<td>" + jsonObj[i].type + "</td>";
+                    tbl += "<td>" + jsonObj[i].name + "</td>";
+                    tbl += "<td>" + (jsonObj[i].money).replace(/\B(?<!\.\d*)(?=(\d{3})+(?!\d))/g, ",") + "</td></tr>";
+                }
+                tbl += "</table>";
+                return tbl;
+            }
+        }
+    </script>
+</head>
+
+<body>
+    <h1 id="hh1"></h1>
+    <div id="resText"></div>
+</body>
+
+</html>
