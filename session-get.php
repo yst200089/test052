@@ -26,6 +26,7 @@
 ?>
 <hr>
 <form method="post" action="session-set.php">
-Input Key value <input type="text" name="keyValue">
+請輸入帳號: <input type="text" name="Acc">
+請輸入密碼: <input type="text" name="keyValue">
 <input type="submit">
 </form>
