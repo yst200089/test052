@@ -1,3 +1,4 @@
+<!-- 檢查帳密 -->
 <?php
 	session_start(); //啟用session 功能, 必須在php程式還沒輸出任何訊息之前啟用
 	$acc = $_POST["Acc"];
@@ -12,6 +13,7 @@
 	else {
 		unset($_SESSION["Acc"]);
 		unset($_SESSION["keyValue"]);
+		header("Location: session-get.php");
 	}
 ?>
 <!-- ok!! -->

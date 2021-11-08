@@ -6,7 +6,8 @@
 </head>
 
 <body>
-
+<p>返回登錄頁面<a href='session-get.php'> Login </a></p>
+<hr />
 <p>my guest book !!   	<a href='1.insertUI.php'>Add</a></p>
 <hr />
 <table width="200" border="1">
