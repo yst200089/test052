@@ -3,7 +3,7 @@
 	$val = $_POST["keyValue"];
 	
 	$_SESSION["keyValue"] = $val; //宣告session 變數並指定值
-	setcookie("keyVallue", $val, time()+36000); // 設定cookie值與有效時間
+	setcookie("keyValue", $val, time()+36000); // 設定cookie值與有效時間
 ?>
 ok!!
 <a href="session-get.php">get session value</a>
