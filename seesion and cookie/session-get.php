@@ -1,7 +1,7 @@
 <?php
-	//Session �ϥνd��
-	session_start(); //�ҥ�session �\��, �����bphp�{���٨S��X����T�����e�ҥ�
-	//$_SESSION["varName"] = "session ok"; //�ŧisession �ܼƨë��w��
+	//Session 使用範例
+	session_start(); //啟用session 功能, 必須在php程式還沒輸出任何訊息之前啟用
+	//$_SESSION["varName"] = "session ok"; //宣告session 變數並指定值
 
 	if ( isset($_SESSION["keyValue"])) {
 		echo "Session['keyValue']=" . $_SESSION["keyValue"] . "<br>";
@@ -16,14 +16,12 @@
 	}
 
 /*
-	$a = $_SESSION["keyValue"]; //���osession �ܼ� keyValue ����
-	unset($_SESSION['�ܼƦW��']); //����session �ܼƪ��ŧi
-
-	//cookie�ϥνd��
-	setcookie("cookieName", "cookieValue", time()+36000); // �]�wcookie�ȻP���Įɶ�
-	$b= $_COOKIE["cookieName"]; //���ocookie����
+	$a = $_SESSION["keyValue"]; //取得session 變數 keyValue 的值
+	unset($_SESSION['變數名稱']); //取消session 變數的宣告
+	//cookie使用範例
+	setcookie("cookieName", "cookieValue", time()+36000); // 設定cookie值與有效時間
+	$b= $_COOKIE["cookieName"]; //取得cookie的值
 	echo $a, $b;
-
 */
 ?>
 <hr>
