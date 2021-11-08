@@ -1,5 +1,8 @@
 <?php
 require("dbconfig.php");
+// if (!checkAccess()){ //檢查是否有登錄
+// 	header("Location: 0.loginUI.php");
+// }
 if(isset($_GET['id'])) {
 	$id=(int)$_GET['id'];
 } else {

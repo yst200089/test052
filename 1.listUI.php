@@ -1,3 +1,9 @@
+<?php
+require("dbconfig.php");
+// if (!checkAccess()){ //檢查是否有登錄
+// 	header("Location: 0.loginUI.php");
+// }
+?>
 <!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
 <html xmlns="http://www.w3.org/1999/xhtml">
 <head>
@@ -6,7 +12,7 @@
 </head>
 
 <body>
-<p>返回登錄頁面<a href='session-get.php'> Login </a></p>
+<p><?php echo "hello ",$_SESSION["userID"]; ?>返回登錄頁面<a href='0.loginUI.php'> Login </a></p>
 <hr />
 <p>my guest book !!   	<a href='1.insertUI.php'>Add</a></p>
 <hr />
@@ -20,13 +26,12 @@
 	<td>-</td>
   </tr>
 <?php
-require("dbconfig.php");
 $sql = "select * from guestbook order by id desc;";
 $stmt = mysqli_prepare($db, $sql );
 mysqli_stmt_execute($stmt);
 $result = mysqli_stmt_get_result($stmt); 
 
-while (	$rs = mysqli_fetch_assoc($result)) {
+while ($rs = mysqli_fetch_assoc($result)) {
 	$id=$rs['id'];
 	echo "<tr><td>" , $rs['id'] ,
 	"</td><td><a href='3.viewPost.php?id=$id'>" , $rs['title'],"</a>",
