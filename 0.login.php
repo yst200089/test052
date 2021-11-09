@@ -6,7 +6,7 @@ require("dbconfig.php");
 $loginID = $_POST["id"];
 $password = $_POST["pwd"];
 
-$sql = "select loginID from User where password=PASSWORD(?);";
+$sql = "select loginID, role, level from User where password=PASSWORD(?);";
 $stmt = mysqli_prepare($db, $sql);
 mysqli_stmt_bind_param($stmt, "s", $password); //bind parameters with variables
 mysqli_stmt_execute($stmt);
@@ -15,9 +15,13 @@ $result = mysqli_stmt_get_result($stmt);
 if ($rs = mysqli_fetch_assoc($result)) {
 	if ($rs['loginID'] == $loginID) {
    		$_SESSION['userID'] = $loginID; //宣告session 變數並指定值
+		$_SESSION['role'] = $rs['role'];
+		$_SESSION['level'] = $rs['level'];
    		header("Location: 1.listUI.php");
 	} else {
    		$_SESSION['userID'] = '';
+		$_SESSION['role'] = '';
+		$_SESSION['level'] = '';
    		header("Location: 0.loginUI.php");
 	}
 }

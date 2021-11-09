@@ -1,8 +1,8 @@
 <?php
 require("dbconfig.php");
-// if (!checkAccess()){ //檢查是否有登錄
-// 	header("Location: 0.loginUI.php");
-// }
+if (!(checkAccessRole('user') or checkAccessRole('admin'))){ //檢查是否有登錄
+	header("Location: 0.loginUI.php");
+}
 if(isset($_GET['id'])) {
 	$id=(int)$_GET['id'];
 } else {
@@ -54,9 +54,10 @@ $stmt = mysqli_prepare($db, $sql);
 mysqli_stmt_bind_param($stmt, "i", $id);
 mysqli_stmt_execute($stmt);
 $result = mysqli_stmt_get_result($stmt); 
-echo "<table><tr><td>留言</td><td>讚</td><td>-</td></tr>";
+echo "<table><tr><td>留言</td><td>用戶</td><td>讚</td><td>-</td></tr>";
 while ($rs = mysqli_fetch_assoc($result)) {
-	echo "<tr><td>",$rs['msg'],
+	echo "<tr><td>", $rs['msg'],
+	"</td><td>", $rs['author'], "</td>",
 	"</td><td>", $rs['likes'], "</td>",
 	"<td><a href='3.like.php?id=", $rs['id'],"&mid=", $rs['mid'], "&t=1'>Like</a> ",
 	"<a href='3.like.php?id=", $rs['id'],"&mid=", $rs['mid'], "&t=-1'>Dislike</a></td></tr>";

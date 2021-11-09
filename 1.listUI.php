@@ -1,8 +1,11 @@
 <?php
 require("dbconfig.php");
-// if (!checkAccess()){ //檢查是否有登錄
+// if (!(checkAccessRole('user') or checkAccessRole('admin'))){ //檢查是否有登錄
 // 	header("Location: 0.loginUI.php");
 // }
+if (!(checkAccessLevel(1))){ //檢查是否有登錄
+	header("Location: 0.loginUI.php");
+}
 ?>
 <!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
 <html xmlns="http://www.w3.org/1999/xhtml">
@@ -12,11 +15,12 @@ require("dbconfig.php");
 </head>
 
 <body>
-<p><?php echo "hello ",$_SESSION["userID"]; ?>返回登錄頁面<a href='0.loginUI.php'> Login </a></p>
+<?php echo "hello ",$_SESSION["userID"]; ?><br />
+<p><a href='0.loginUI.php'> Log Out </a></p>
 <hr />
 <p>my guest book !!   	<a href='1.insertUI.php'>Add</a></p>
 <hr />
-<table width="200" border="1">
+<table border="1">
   <tr>
     <td>id</td>
     <td>title</td>
@@ -27,7 +31,7 @@ require("dbconfig.php");
   </tr>
 <?php
 $sql = "select * from guestbook order by id desc;";
-$stmt = mysqli_prepare($db, $sql );
+$stmt = mysqli_prepare($db, $sql);
 mysqli_stmt_execute($stmt);
 $result = mysqli_stmt_get_result($stmt); 
 
@@ -39,9 +43,14 @@ while ($rs = mysqli_fetch_assoc($result)) {
 	"</td><td>", $rs['name'], "</td>",
 	"</td><td>", $rs['likes'], "</td>",
 	"<td><a href='2.like.php?id=", $rs['id'], "&t=1'>Like</a> ",
-	"<a href='2.like.php?id=", $rs['id'], "&t=-1'>Dislike</a> ",
-	"<a href='2.delete.php?id=", $rs['id'], "'>Delete</a> ",
-	"<a href='1.editUI.php?id=", $rs['id'], "'>Edit</a></td></tr>";
+	"<a href='2.like.php?id=", $rs['id'], "&t=-1'>Dislike</a>";
+	if (checkAccessLevel(5)) {
+	// if (checkAccessRole('admin')) {
+		echo 
+		"<a href='2.delete.php?id=", $rs['id'], "'>Delete</a> ",
+		"<a href='1.editUI.php?id=", $rs['id'], "'>Edit</a>";
+	}
+	echo "</td></tr>";
 }
 ?>
 </table>
