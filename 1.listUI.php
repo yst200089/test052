@@ -1,11 +1,11 @@
 <?php
 require("dbconfig.php");
-// if (!(checkAccessRole('user') or checkAccessRole('admin'))){ //檢查是否有登錄
-// 	header("Location: 0.loginUI.php");
-// }
-if (!(checkAccessLevel(1))){ //檢查是否有登錄
+if (!(checkAccessRole('user') or checkAccessRole('admin'))){ //檢查是否有登錄
 	header("Location: 0.loginUI.php");
 }
+// if (!(checkAccessLevel(1))){ //檢查是否有登錄
+// 	header("Location: 0.loginUI.php");
+// }
 ?>
 <!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
 <html xmlns="http://www.w3.org/1999/xhtml">
@@ -31,10 +31,11 @@ if (!(checkAccessLevel(1))){ //檢查是否有登錄
   </tr>
 <?php
 $sql = "select * from guestbook order by id desc;";
-$stmt = mysqli_prepare($db, $sql);
-mysqli_stmt_execute($stmt);
-$result = mysqli_stmt_get_result($stmt); 
+$stmt = mysqli_prepare($db, $sql); // 對象: 取$db, 查詢指令
+mysqli_stmt_execute($stmt); // 接受準備好的語句對象
+$result = mysqli_stmt_get_result($stmt); //從給定的語句(如果有的話)中檢索結果集並返回它
 
+// 從結果集中取得一行作為關聯數組
 while ($rs = mysqli_fetch_assoc($result)) {
 	$id=$rs['id'];
 	echo "<tr><td>" , $rs['id'] ,
@@ -44,8 +45,8 @@ while ($rs = mysqli_fetch_assoc($result)) {
 	"</td><td>", $rs['likes'], "</td>",
 	"<td><a href='2.like.php?id=", $rs['id'], "&t=1'>Like</a> ",
 	"<a href='2.like.php?id=", $rs['id'], "&t=-1'>Dislike</a>";
-	if (checkAccessLevel(5)) {
-	// if (checkAccessRole('admin')) {
+	// if (checkAccessLevel(5)) {
+	if (checkAccessRole('admin')) {
 		echo 
 		"<a href='2.delete.php?id=", $rs['id'], "'>Delete</a> ",
 		"<a href='1.editUI.php?id=", $rs['id'], "'>Edit</a>";

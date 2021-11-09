@@ -67,6 +67,7 @@ while ($rs = mysqli_fetch_assoc($result)) {
     <td><label>
       <input name="mid" type="hidden" value="<?php echo $id;?>" />
       <input name="msg" type="text" id="msg" />
+	  <input name="author" type="hidden" value="<?php echo $_SESSION['userID'];?>" />
     </label></td>
     <td><label>
       <input type="submit" name="Submit" value="送出" />
