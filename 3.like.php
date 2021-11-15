@@ -7,6 +7,7 @@ if(isset($_GET['id'])) {
 }
 $t=(int)$_GET['t'];
 $mid=(int)$_GET['mid'];
+$type=(int)$_GET['type'];
 if ($id>0) {
 	if($t == 1){
 		$sql = "update response set `likes`=likes+1 where id=?;";
@@ -21,7 +22,7 @@ if ($id>0) {
 	mysqli_stmt_execute($stmt);
 
 	//echo "liked.";
-	header("Location: 3.viewPost.php?id=$mid");
+	header("Location: 3.viewPost.php?id=$mid&type=$type");
 } else {
 	echo "empty id, cannot like.";
 }

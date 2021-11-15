@@ -15,11 +15,13 @@ require('dbconfig.php');
 $title=$_POST['title'];
 $msg=$_POST['msg'];
 $name=$_POST['myname'];
+$type=$_POST['type'];
+$_SESSION['msg'.$msg] = array();
 
 if ($title) {
-	$sql = "insert into guestbook (title, msg, name) values (?, ?, ?)";
+	$sql = "insert into guestbook (title, msg, name, type) values (?, ?, ?, ?)";
 	$stmt = mysqli_prepare($db, $sql); //prepare sql statement
-	mysqli_stmt_bind_param($stmt, "sss", $title, $msg,$name); //bind parameters with variables
+	mysqli_stmt_bind_param($stmt, "sssi", $title, $msg,$name, $type); //bind parameters with variables
 	mysqli_stmt_execute($stmt);  //執行SQL
 	echo "message added.";
 } else {
@@ -27,7 +29,7 @@ if ($title) {
 }
 ?>
 <hr>
-<a href="1.listUI.php">Home</a>
+<a href="0.home.php">Home</a>
 
 </body>
 </html>

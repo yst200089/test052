@@ -18,14 +18,18 @@ if(isset($_GET['id'])) {
 </head>
 
 <body>
-<a href="1.listUI.php">Back</a><br>
-<table width="200" border="1">
+<?php
+$type = (int)$_GET['type'];
+echo "<a href='1.listUI.php?type=$type'>Back</a><br>";
+?>
+<table width="300" border="1">
   <tr>
     <td>id</td>
     <td>title</td>
     <td>message</td>
     <td>name</td>
     <td>讚</td>
+	<td>類別</td>
 	<td>-</td>
   </tr>
 <?php
@@ -34,15 +38,29 @@ $stmt = mysqli_prepare($db, $sql );
 mysqli_stmt_bind_param($stmt, "i", $id);
 mysqli_stmt_execute($stmt);
 $result = mysqli_stmt_get_result($stmt); 
-$rs = mysqli_fetch_assoc($result); 
-
+$rs = mysqli_fetch_assoc($result);
+$msg = $rs['msg'];
 	echo "<tr><td>" , $rs['id'] ,
 	"</td><td>", $rs['title'],
-	"</td><td>" , $rs['msg'], 
-	"</td><td>", $rs['name'], "</td>",
-	"</td><td>", $rs['likes'], "</td>",
-	"<td><a href='2.like.php?id=", $rs['id'], "&t=1'>Like</a> ",
-	"<a href='2.like.php?id=", $rs['id'], "&t=-1'>Dislike</a> ",
+	"</td><td>";
+	if ($rs['response'] <= 5) {
+		echo "<font color='black'>$msg</font>";
+	} else if ($rs['response']>5 && $rs['response'] <= 10) {
+		echo "<font color='blue'>$msg</font>";
+	} else {
+		echo "<font color='red'>$msg</font>";
+	}
+	echo "</td><td>", $rs['name'], "</td>",
+	"</td><td>", $rs['likes'], "</td>";
+	if ($type == 1) {
+		echo "</td><td>閒聊</td>";
+	} else if ($type == 2) {
+		echo "</td><td>心情</td>";
+	} else if ($type == 3) {
+		echo "</td><td>八卦</td>";
+	}
+	echo "<td><a href='2.like.php?id=", $rs['id'], "&t=1'>Like</a> ",
+	"<a href='2.like.php?id=", $rs['id'], "&t=-1&type=$type'>Dislike</a> ",
 	"<a href='2.delete.php?id=", $rs['id'], "'>Delete</a> ",
 	"<a href='1.editUI.php?id=", $rs['id'], "'>Edit</a></td></tr>";
 ?>
@@ -68,9 +86,11 @@ while ($rs = mysqli_fetch_assoc($result)) {
       <input name="mid" type="hidden" value="<?php echo $id;?>" />
       <input name="msg" type="text" id="msg" />
 	  <input name="author" type="hidden" value="<?php echo $_SESSION['userID'];?>" />
+	  <input name="response" type="hidden" value="<?php echo 1;?>" />
+	  <input name="type" type="hidden" value="<?php echo $type;?>" />
     </label></td>
     <td><label>
-      <input type="submit" name="Submit" value="送出" />
+        <input type="submit" name="Submit" value="送出" />
     </label></td>
 	</form>
 </body>

@@ -15,10 +15,10 @@ require('dbconfig.php');
   <tr>
     <td>title</td>
     <td>message</td>
-    <!-- <td>name</td> -->
+    <!-- <td>type</td> -->
   </tr>
-  <tr><form method="post" action="2.insert.php">
-    <td><label>
+  <form method="post" action="2.insert.php">
+    <tr><td><label>
       <input name="title" type="text" id="title" />
     </label></td>
     <td><label>
@@ -26,10 +26,15 @@ require('dbconfig.php');
     </label></td>
     <td><label>
       <input name="myname" type="hidden" value="<?php echo $_SESSION['userID'];?>" />
-      <input type="submit" name="Submit" value="送出" />
     </label></td>
-	</form>
   </tr>
+  <select name="type">
+    <option value="1">閒聊</option>
+    <option value="2">心情</option>
+    <option value="3">八卦</option>
+  </select>
+  <input type="submit" name="Submit" value="送出" />
+	</form>
 </table>
 </body>
 </html>

@@ -17,7 +17,7 @@ if ($rs = mysqli_fetch_assoc($result)) {
    		$_SESSION['userID'] = $loginID; //宣告session 變數並指定值
 		$_SESSION['role'] = $rs['role'];
 		$_SESSION['level'] = $rs['level'];
-   		header("Location: 1.listUI.php");
+   		header("Location: 0.home.php");
 	} else {
    		$_SESSION['userID'] = '';
 		$_SESSION['role'] = '';

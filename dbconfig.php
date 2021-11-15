@@ -21,11 +21,11 @@ function checkAccessRole($reqRole){
     }
 }
 // 用數字來表達權限
-function checkAccessLevel($reqLevel){
-    if (isset($_SESSION["level"]) && $_SESSION["level"] >= $reqLevel){
-        return True;
-    } else {
-        return False;
-    }
-}
+// function checkAccessLevel($reqLevel){
+//     if (isset($_SESSION["level"]) && $_SESSION["level"] >= $reqLevel){
+//         return True;
+//     } else {
+//         return False;
+//     }
+// }
 ?>
